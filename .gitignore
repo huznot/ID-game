@@ -1,0 +1,7 @@
+fp game test.exe
+fp game test_Data/
+fp game test_BurstDebugInformation_DoNotShip/
+D3D12/
+MonoBleedingEdge/
+UnityCrashHandler64.exe
+UnityPlayer.dll

@@ -115,15 +115,15 @@
   <script>
     // --- Unity loader ---
     var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+    var loaderUrl = buildUrl + "/Builds.loader.js";
     var config = {
-      dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-      frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
-      codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+      dataUrl: buildUrl + "/Builds.data.br",
+      frameworkUrl: buildUrl + "/Builds.framework.js.br",
+      codeUrl: buildUrl + "/Builds.wasm.br",
       streamingAssetsUrl: "StreamingAssets",
-      companyName: "{{{ COMPANY_NAME }}}",
-      productName: "{{{ PRODUCT_NAME }}}",
-      productVersion: "{{{ PRODUCT_VERSION }}}",
+      companyName: "DefaultCompany",
+      productName: "fp game test",
+      productVersion: "0.1",
     };
 
     var canvas = document.getElementById("unity-canvas");

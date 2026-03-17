@@ -1,168 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Game</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: #000;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #unity-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    #unity-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    #fullscreen-btn {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    #fullscreen-btn:hover {
-      background: rgba(255,255,255,0.22);
-    }
-
-    #fullscreen-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: none;
-      stroke: white;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    #unity-loading-bar {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 240px;
-    }
-
-    #unity-progress-bar-empty {
-      width: 100%;
-      height: 4px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    #unity-progress-bar-full {
-      width: 0%;
-      height: 100%;
-      background: white;
-      border-radius: 2px;
-      transition: width 0.2s;
-    }
-  </style>
-</head>
-<body>
-  <div id="unity-container">
-    <canvas id="unity-canvas"></canvas>
-
-    <div id="unity-loading-bar">
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full"></div>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>fp game test</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #000; overflow: hidden; }
+      #unity-container { width: 100vw; height: 100vh; position: relative; }
+      #unity-canvas { width: 100% !important; height: 100% !important; }
+      #unity-footer { display: none; }
+      #unity-loading-bar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; }
+      #unity-logo { display: none; }
+      #unity-progress-bar-empty { width: 100%; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
+      #unity-progress-bar-full { width: 0%; height: 100%; background: white; border-radius: 2px; transition: width 0.2s; }
+      #fullscreen-btn { position: absolute; bottom: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 100; backdrop-filter: blur(4px); }
+      #fullscreen-btn:hover { background: rgba(255,255,255,0.22); }
+      #fullscreen-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
       </div>
+      <div id="unity-warning"></div>
+      <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">
+        <svg id="icon-expand" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        <svg id="icon-compress" viewBox="0 0 24 24" style="display:none"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
+      </button>
     </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
 
-    <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">
-      <svg id="icon-expand" viewBox="0 0 24 24">
-        <polyline points="15 3 21 3 21 9"/>
-        <polyline points="9 21 3 21 3 15"/>
-        <line x1="21" y1="3" x2="14" y2="10"/>
-        <line x1="3" y1="21" x2="10" y2="14"/>
-      </svg>
-      <svg id="icon-compress" viewBox="0 0 24 24" style="display:none">
-        <polyline points="4 14 10 14 10 20"/>
-        <polyline points="20 10 14 10 14 4"/>
-        <line x1="10" y1="14" x2="3" y2="21"/>
-        <line x1="21" y1="3" x2="14" y2="10"/>
-      </svg>
-    </button>
-  </div>
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
 
-  <script>
-    // --- Unity loader ---
-    var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/Builds.loader.js";
-    var config = {
-      dataUrl: buildUrl + "/Builds.data.br",
-      frameworkUrl: buildUrl + "/Builds.framework.js.br",
-      codeUrl: buildUrl + "/Builds.wasm.br",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "fp game test",
-      productVersion: "0.1",
-    };
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Builds.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/Builds.data",
+        frameworkUrl: buildUrl + "/Builds.framework.js",
+        codeUrl: buildUrl + "/Builds.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "fp game test",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
 
-    var canvas = document.getElementById("unity-canvas");
-    var loadingBar = document.getElementById("unity-loading-bar");
-    var progressBarFull = document.getElementById("unity-progress-bar-full");
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      }
 
-    var script = document.createElement("script");
-    script.src = loaderUrl;
-    script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        progressBarFull.style.width = 100 * progress + "%";
-      }).then((unityInstance) => {
-        loadingBar.style.display = "none";
-        window._unityInstance = unityInstance;
-      }).catch((message) => {
-        alert(message);
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          document.querySelector("#unity-loading-bar").style.display = "none";
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+          document.getElementById("icon-expand").style.display = "none";
+          document.getElementById("icon-compress").style.display = "block";
+        } else {
+          document.exitFullscreen();
+          document.getElementById("icon-expand").style.display = "block";
+          document.getElementById("icon-compress").style.display = "none";
+        }
+      }
+
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement) {
+          document.getElementById("icon-expand").style.display = "block";
+          document.getElementById("icon-compress").style.display = "none";
+        }
       });
-    };
-    document.body.appendChild(script);
-
-    // --- Fullscreen ---
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-        document.getElementById("icon-expand").style.display = "none";
-        document.getElementById("icon-compress").style.display = "block";
-      } else {
-        document.exitFullscreen();
-        document.getElementById("icon-expand").style.display = "block";
-        document.getElementById("icon-compress").style.display = "none";
-      }
-    }
-
-    document.addEventListener("fullscreenchange", () => {
-      if (!document.fullscreenElement) {
-        document.getElementById("icon-expand").style.display = "block";
-        document.getElementById("icon-compress").style.display = "none";
-      }
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

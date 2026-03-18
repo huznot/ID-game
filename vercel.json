@@ -8,10 +8,10 @@
       ]
     },
     {
-      "source": "/Build/(.*\\.unityweb)",
+      "source": "/Build/(.*)",
       "headers": [
-        { "key": "Content-Encoding", "value": "gzip" },
-        { "key": "Content-Type", "value": "application/octet-stream" }
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Cache-Control", "value": "no-transform" }
       ]
     }
   ],

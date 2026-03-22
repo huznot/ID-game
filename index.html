@@ -12,13 +12,43 @@
       #unity-container { width: 100vw; height: 100vh; position: relative; }
       #unity-canvas { width: 100% !important; height: 100% !important; }
       #unity-footer { display: none; }
-      #unity-loading-bar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; }
+      #unity-loading-bar {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 240px; text-align: center;
+      }
       #unity-logo { display: none; }
-      #unity-progress-bar-empty { width: 100%; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
-      #unity-progress-bar-full { width: 0%; height: 100%; background: white; border-radius: 2px; transition: width 0.2s; }
-      #fullscreen-btn { position: absolute; bottom: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 100; backdrop-filter: blur(4px); }
+      #unity-progress-bar-empty {
+        width: 100%; height: 4px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 2px; overflow: hidden;
+      }
+      #unity-progress-bar-full {
+        width: 0%; height: 100%;
+        background: white; border-radius: 2px;
+        transition: width 0.2s;
+      }
+      #loading-text {
+        color: rgba(255,255,255,0.5);
+        font-family: sans-serif; font-size: 12px;
+        margin-bottom: 10px;
+      }
+      #fullscreen-btn {
+        position: absolute; bottom: 16px; right: 16px;
+        width: 36px; height: 36px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s; z-index: 100;
+        backdrop-filter: blur(4px);
+      }
       #fullscreen-btn:hover { background: rgba(255,255,255,0.22); }
-      #fullscreen-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      #fullscreen-btn svg {
+        width: 16px; height: 16px; fill: none;
+        stroke: white; stroke-width: 2;
+        stroke-linecap: round; stroke-linejoin: round;
+      }
     </style>
   </head>
   <body>
@@ -26,6 +56,7 @@
       <canvas id="unity-canvas" tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
+        <div id="loading-text">Loading...</div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
@@ -81,15 +112,19 @@
         canvas.className = "unity-mobile";
       }
 
-      document.querySelector("#unity-loading-bar").style.display = "block";
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var loadingText = document.querySelector("#loading-text");
+      loadingBar.style.display = "block";
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+          progressBarFull.style.width = (100 * progress) + "%";
+          loadingText.textContent = "Loading... " + Math.round(progress * 100) + "%";
         }).then((unityInstance) => {
-          document.querySelector("#unity-loading-bar").style.display = "none";
+          loadingBar.style.display = "none";
         }).catch((message) => {
           alert(message);
         });

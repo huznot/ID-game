@@ -7,35 +7,6 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <style>
-      #zoom-control {
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        z-index: 100;
-        background: rgba(255,255,255,0.12);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 8px;
-        padding: 6px 10px;
-        backdrop-filter: blur(4px);
-      }
-      #zoom-control label {
-        color: rgba(255,255,255,0.7);
-        font-family: sans-serif;
-        font-size: 11px;
-      }
-      #zoom-slider {
-        width: 80px;
-        cursor: pointer;
-      }
-      #zoom-value {
-        color: white;
-        font-family: sans-serif;
-        font-size: 11px;
-        min-width: 30px;
-}
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { background: #000; overflow: hidden; }
       #unity-container { width: 100vw; height: 100vh; position: relative; }
@@ -91,24 +62,12 @@
         </div>
       </div>
       <div id="unity-warning"></div>
-      <div id="zoom-control">
-        <label>Zoom</label>
-        <input type="range" id="zoom-slider" min="50" max="100" value="100" oninput="setZoom(this.value)">
-        <span id="zoom-value">100%</span>
-      </div>
       <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">
         <svg id="icon-expand" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
         <svg id="icon-compress" viewBox="0 0 24 24" style="display:none"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
       </button>
     </div>
     <script>
-      function setZoom(value) {
-        document.getElementById("unity-canvas").style.transform = "scale(" + value/100 + ")";
-        document.getElementById("unity-canvas").style.transformOrigin = "top left";
-        document.getElementById("unity-canvas").style.width = (100 / (value/100)) + "%";
-        document.getElementById("unity-canvas").style.height = (100 / (value/100)) + "vh";
-        document.getElementById("zoom-value").textContent = value + "%";
-      }
       var canvas = document.querySelector("#unity-canvas");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
       var loadingText = document.querySelector("#loading-text");

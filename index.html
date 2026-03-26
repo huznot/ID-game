@@ -73,7 +73,6 @@
       var loadingText = document.querySelector("#loading-text");
       var loadingBar = document.querySelector("#unity-loading-bar");
 
-      // Fake progress that slowly crawls to 90% while waiting for Unity
       var fakeProgress = 0;
       var fakeInterval = setInterval(() => {
         if (fakeProgress < 90) {
@@ -131,7 +130,6 @@
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          // When Unity reports real progress, use the higher of fake or real
           var real = progress * 100;
           if (real > fakeProgress) {
             fakeProgress = real;
